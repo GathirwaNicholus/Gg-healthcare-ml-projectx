@@ -7,10 +7,6 @@ wheels/
 *.egg-info
 *.pyc
 
-# ML models (large binary files)
-models/*.joblib
-models/*.pkl
-
 # Data (raw and cleaned CSVs can be large)
 data/raw/
 data/cleaned_healthcare.csv
