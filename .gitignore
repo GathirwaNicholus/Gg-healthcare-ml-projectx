@@ -1,0 +1,29 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+*.pyc
+
+# ML models (large binary files)
+models/*.joblib
+models/*.pkl
+
+# Data (raw and cleaned CSVs can be large)
+data/raw/
+data/cleaned_healthcare.csv
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment variables - contains sensitive information (I am using a server on the web)
+.env
+
+# Virtual environments
+.venv

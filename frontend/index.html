@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Healthcare Prediction</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; }
+    input, select { width: 100%; padding: 8px; margin: 6px 0 14px; box-sizing: border-box; }
+    button { background: #2563eb; color: white; padding: 12px 24px; border: none;
+             border-radius: 6px; cursor: pointer; font-size: 16px; }
+    #result { margin-top: 24px; padding: 16px; border-radius: 8px; font-size: 18px; }
+    .normal       { background: #d1fae5; color: #065f46; }
+    .abnormal     { background: #fee2e2; color: #991b1b; }
+    .inconclusive { background: #fef9c3; color: #713f12; }
+  </style>
+</head>
+<body>
+  <h1> Healthcare Test Result Predictor</h1>
+  <label>Age: <input type="number" id="age" value="45"></label>
+  <label>Gender:
+    <select id="gender"><option>Male</option><option>Female</option></select>
+  </label>
+  <label>Blood Type: <input id="blood_type" value="A+"></label>
+  <label>Medical Condition: <input id="medical_condition" value="Diabetes"></label>
+  <label>Insurance Provider: <input id="insurance_provider" value="Medicare"></label>
+  <label>Billing Amount: <input type="number" id="billing_amount" value="25000"></label>
+  <label>Room Number: <input type="number" id="room_number" value="205"></label>
+  <label>Admission Type:
+    <select id="admission_type">
+      <option>Elective</option><option>Emergency</option><option>Urgent</option>
+    </select>
+  </label>
+  <label>Medication: <input id="medication" value="Aspirin"></label>
+  <label>Length of Stay (days): <input type="number" id="length_of_stay" value="5"></label>
+  <label>Admission Month (1-12): <input type="number" id="admission_month" value="6"></label>
+  <label>Admission Year: <input type="number" id="admission_year" value="2023"></label>
+
+  <button onclick="predict()">Predict Test Result</button>
+
+  <div id="result"></div>
+
+  <script>
+    async function predict() {
+      const payload = {
+        age: +document.getElementById("age").value,
+        gender: document.getElementById("gender").value,
+        blood_type: document.getElementById("blood_type").value,
+        medical_condition: document.getElementById("medical_condition").value,
+        insurance_provider: document.getElementById("insurance_provider").value,
+        billing_amount: +document.getElementById("billing_amount").value,
+        room_number: +document.getElementById("room_number").value,
+        admission_type: document.getElementById("admission_type").value,
+        medication: document.getElementById("medication").value,
+        length_of_stay: +document.getElementById("length_of_stay").value,
+        admission_month: +document.getElementById("admission_month").value,
+        admission_year: +document.getElementById("admission_year").value,
+      };
+
+      const res = await fetch("/api/v1/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      const div = document.getElementById("result");
+      div.className = data.prediction.toLowerCase();
+      div.textContent = `Predicted Result: ${data.prediction}`;
+    }
+  </script>
+</body>
+</html>
