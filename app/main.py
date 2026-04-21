@@ -20,6 +20,10 @@ app.include_router(router, prefix="/api/v1")
 # Start weekly retraining scheduler on startup
 @app.on_event("startup")
 def startup_event():
+    #faced an error during deployment, thus making dir if the dir does not exist
+    os.makedirs("models", exist_ok=True)
+
+    # checks if the model exists.
     if not os.path.exists("models/model.joblib"):
         print(" No model found — running initial training...")
         train()
