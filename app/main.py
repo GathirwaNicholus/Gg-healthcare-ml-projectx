@@ -4,6 +4,7 @@ from app.routes import router
 from scheduler import start_scheduler
 from dotenv import load_dotenv
 import os
+from ml.train import train
 
 load_dotenv()
 
@@ -19,9 +20,11 @@ app.include_router(router, prefix="/api/v1")
 # Start weekly retraining scheduler on startup
 @app.on_event("startup")
 def startup_event():
+    if not os.path.exists("models/model.joblib"):
+        print(" No model found — running initial training...")
+        train()
     start_scheduler()
 
-# 2. Update the root route to return your HTML file
 @app.get("/")
 def root():
     html_path = "frontend/index.html"
@@ -29,4 +32,4 @@ def root():
     # Best practice -> checking to ensure the file exists (It does)
     if os.path.exists(html_path):
         return FileResponse(html_path)
-    return {"error": "UI file not found. Check your file paths!"}
+    return {"error": "UI file not found. Check file paths!"}
