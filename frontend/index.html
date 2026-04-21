@@ -56,15 +56,31 @@
         admission_year: +document.getElementById("admission_year").value,
       };
 
-      const res = await fetch("/api/v1/predict", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      const div = document.getElementById("result");
-      div.className = data.prediction.toLowerCase();
-      div.textContent = `Predicted Result: ${data.prediction}`;
+      console.log("Sending payload:", payload);
+
+      try {
+        const res = await fetch("/api/v1/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        
+        const data = await res.json();
+        console.log("Backend response:", data);
+
+        // If the backend threw an error (like a 422), alert the user
+        if (!res.ok) {
+          alert("Backend Error: " + JSON.stringify(data));
+          return;
+        }
+
+        const div = document.getElementById("result");
+        div.className = data.prediction.toLowerCase();
+        div.textContent = `Predicted Result: ${data.prediction}`;
+      } catch (error) {
+        console.error("Network/Fetch error:", error);
+        alert("A network error occurred. Check the browser console.");
+      }
     }
   </script>
 </body>
